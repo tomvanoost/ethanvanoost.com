@@ -1,3 +1,0 @@
-# Executables are not stored in git (some exceed GitHub's 100 MB file limit) —
-# host these elsewhere (GitHub Releases, Git LFS, or the web host's storage).
-*.exe
