@@ -259,6 +259,8 @@ body {
 .icon-cubelands { background: rgba(10,132,255,0.14); color: var(--accent); }
 .icon-filey { background: rgba(94,92,230,0.14); color: var(--accent-2); }
 .icon-ytc { background: rgba(255,55,95,0.14); color: var(--accent-pink); }
+.icon-musy { background: rgba(124,92,255,0.16); color: #7c5cff; }
+.icon-survivor { background: rgba(0,224,198,0.16); color: #0a9c86; }
 
 .card-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 3px; }
 .card-tag { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--accent); font-weight: 600; margin-bottom: 14px; }
@@ -282,6 +284,37 @@ body {
   color: var(--text); font-weight: 600; font-size: 0.95rem; transition: background 0.15s;
 }
 .details-btn:hover { background: #fff; }
+
+/* Screenshot banner on cards (full-bleed to the card edges) */
+.card-shot {
+  margin: -30px -28px 22px; border-radius: var(--radius) var(--radius) 0 0;
+  overflow: hidden; aspect-ratio: 16 / 10; background: rgba(120,130,150,0.1);
+  border-bottom: 1px solid var(--glass-border);
+}
+.card-shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Secondary download (e.g. CMD edition) */
+.card-actions.alt-row { margin-top: 10px; }
+.download-btn.alt {
+  background: rgba(120,130,150,0.14); color: var(--text);
+  box-shadow: none; border: 1px solid var(--glass-border);
+}
+.download-btn.alt:hover { box-shadow: 0 10px 22px rgba(31,45,80,0.16); }
+.download-btn.alt .size { opacity: 0.65; }
+.btn-primary.block.alt {
+  background: rgba(120,130,150,0.14); color: var(--text);
+  box-shadow: none; border: 1px solid var(--glass-border);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-primary.block.alt:hover { box-shadow: 0 10px 22px rgba(31,45,80,0.16); }
+.btn-primary.block.alt .size { font-size: 0.82rem; font-weight: 500; opacity: 0.65; }
+
+/* Screenshot gallery in the detail modal */
+.modal-shots { display: flex; flex-direction: column; gap: 12px; margin-bottom: 22px; }
+.modal-shots img {
+  width: 100%; border-radius: 14px; display: block;
+  border: 1px solid var(--glass-border); box-shadow: 0 8px 22px rgba(31,45,80,0.14);
+}
 
 /* Footer */
 .footer { text-align: center; padding: 36px 24px 56px; color: var(--text-dim); font-size: 0.88rem; }

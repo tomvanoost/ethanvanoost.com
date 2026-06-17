@@ -23,6 +23,7 @@
       updated: "Jun 2026",
       pills: ["Sandbox", "Voxel", "Launcher"],
       btn: "Download Launcher",
+      screenshots: ["screenshots/cubelands.png"],
       features: [
         "Endless, procedurally generated voxel worlds",
         "Place and break blocks to build anything",
@@ -44,6 +45,7 @@
       updated: "Jun 2026",
       pills: ["Productivity", "Tabs", "Fast"],
       btn: "Download",
+      screenshots: ["screenshots/filey.png"],
       features: [
         "Tabbed browsing — multiple folders in one window",
         "Instant search to find files fast",
@@ -65,12 +67,61 @@
       updated: "Jun 2026",
       pills: ["MP3", "MP4", "OGG", "PNG"],
       btn: "Download",
+      screenshots: ["screenshots/ytc.png"],
       features: [
         "Convert whole playlists or single videos",
         "Export MP3 or OGG for audio-only",
         "Export MP4 for sound + video",
         "Grab the video thumbnail as a PNG",
         "Batch process many items at once",
+      ],
+    },
+    {
+      id: "musy",
+      title: "Musy",
+      tag: "3D minigame hub",
+      iconClass: "icon-musy",
+      icon: "🎮",
+      desc: "A native 3D minigame hub. Type a username, then drop into first-person minigames like Fight the Boss, Bomb Rain, and Parkour Tower — a tiny Roblox-style playground as a real compiled Windows executable, no browser or runtime required.",
+      file: "downloads/Musy.exe",
+      size: "550 KB",
+      version: "1.0",
+      updated: "Jun 2026",
+      pills: ["3D", "Minigames", "raylib"],
+      btn: "Download",
+      screenshots: ["screenshots/musy-menu.png", "screenshots/musy-game.png"],
+      features: [
+        "Six first-person 3D minigames in one hub",
+        "Fight the Boss — sword-duel a giant, dodge bombs and wildfires",
+        "Bomb Rain, Parkour Tower, Coin Rush, The Floor is Lava, and Maze Runner",
+        "Username profiles that save your best score per game",
+        "Adjustable FOV, render distance, mouse sensitivity, and graphics quality",
+      ],
+    },
+    {
+      id: "thesurvivor",
+      title: "The Survivor",
+      tag: "Survival crafting game",
+      iconClass: "icon-survivor",
+      icon: "🪓",
+      desc: "A survival game. Chop wood, keep your campfire lit, mine resources, craft a base, and upgrade your tools — then survive the Killer Ghost that hunts you every night from Day 4 onward.",
+      file: "downloads/TheSurvivor-Game.exe",
+      size: "165 KB",
+      version: "1.0",
+      updated: "Jun 2026",
+      pills: ["Survival", "Crafting", "2D"],
+      btn: "Download",
+      altDownloads: [
+        { label: "Download CMD version", file: "downloads/CMD edition/TheSurvivor.exe", size: "328 KB", tag: "CMD edition" },
+      ],
+      screenshots: ["screenshots/survivor-2d.png"],
+      features: [
+        "Gather wood, stone, coal, and iron to survive",
+        "Keep the campfire lit — its glow is your safe zone",
+        "Survive the Killer Ghost that hunts each night from Day 4",
+        "Craft beds, walls, gates, bear traps, torches, and farm plots",
+        "Upgrade your axe, pickaxe, and sack in the shop",
+        "Also available as the original turn-based CMD edition",
       ],
     },
   ];
@@ -162,8 +213,15 @@
     list.forEach((app) => {
       const card = document.createElement("article");
       card.className = "card";
+      const shot = app.screenshots && app.screenshots.length
+        ? `<div class="card-shot"><img src="${app.screenshots[0]}" alt="${app.title} screenshot" loading="lazy" draggable="false"></div>`
+        : "";
+      const altBtns = (app.altDownloads || [])
+        .map((d) => `<a class="download-btn alt" href="${d.file}" download>${d.label}<span class="size">${d.size}</span></a>`)
+        .join("");
       card.innerHTML = `
         <button class="fav-btn ${isFav(app.id) ? "on" : ""}" type="button" aria-label="Toggle favorite" aria-pressed="${isFav(app.id)}" title="Favorite">★</button>
+        ${shot}
         <div class="card-icon ${app.iconClass}">${app.icon}</div>
         <h2 class="card-title">${app.title}</h2>
         <p class="card-tag">${app.tag}</p>
@@ -173,7 +231,8 @@
         <div class="card-actions">
           <a class="download-btn" href="${app.file}" download>${app.btn}<span class="size">${app.size}</span></a>
           <button class="details-btn" type="button">Details</button>
-        </div>`;
+        </div>
+        ${altBtns ? `<div class="card-actions alt-row">${altBtns}</div>` : ""}`;
       const favBtn = card.querySelector(".fav-btn");
       favBtn.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -188,6 +247,15 @@
         bumpDownload(app.id);
         card.querySelector(".dl-count").textContent = dlLabel(app.id);
         toast("Downloading " + app.title + "…");
+      });
+      card.querySelectorAll(".download-btn.alt").forEach((btn, i) => {
+        const alt = app.altDownloads[i];
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          bumpDownload(app.id);
+          card.querySelector(".dl-count").textContent = dlLabel(app.id);
+          toast("Downloading " + app.title + " (" + (alt.tag || "CMD edition") + ")…");
+        });
       });
       card.querySelector(".details-btn").addEventListener("click", (e) => { e.stopPropagation(); openModal(app); });
       card.addEventListener("click", () => openModal(app));
@@ -241,6 +309,16 @@
     $("#mTitle").textContent = app.title;
     $("#mTag").textContent = app.tag;
     $("#mDesc").textContent = app.desc;
+    const shots = $("#mShots");
+    if (app.screenshots && app.screenshots.length) {
+      shots.innerHTML = app.screenshots
+        .map((s) => `<img src="${s}" alt="${app.title} screenshot" loading="lazy" draggable="false">`)
+        .join("");
+      shots.hidden = false;
+    } else {
+      shots.innerHTML = "";
+      shots.hidden = true;
+    }
     $("#mMeta").innerHTML = `
       <div class="meta-item"><b>Version</b><span>${app.version}</span></div>
       <div class="meta-item"><b>Size</b><span>${app.size}</span></div>
@@ -257,6 +335,20 @@
       applyView(); // keep the card counts in sync behind the modal
       toast("Downloading " + app.title + "…");
     };
+    const altWrap = $("#mAltDownloads");
+    altWrap.innerHTML = (app.altDownloads || [])
+      .map((d) => `<a class="btn-primary block alt" href="${d.file}" download>${d.label}<span class="size">${d.size}</span></a>`)
+      .join("");
+    altWrap.querySelectorAll("a.alt").forEach((a, i) => {
+      const alt = app.altDownloads[i];
+      a.onclick = () => {
+        bumpDownload(app.id);
+        const c = $("#mDownloadCount");
+        if (c) c.textContent = dlCount(app.id).toLocaleString();
+        applyView();
+        toast("Downloading " + app.title + " (" + (alt.tag || "CMD edition") + ")…");
+      };
+    });
     modal.hidden = false;
   }
   modal.querySelectorAll("[data-close]").forEach((el) => el.addEventListener("click", () => (modal.hidden = true)));
