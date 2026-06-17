@@ -60,7 +60,7 @@
       icon: "▶",
       desc: "Convert playlists and videos into PNG (thumbnail), MP3 (sound only), MP4 (sound + video), and OGG (sound only).",
       file: "downloads/YoutubeConverter.exe",
-      size: "133 MB",
+      size: "59.5 MB",
       version: "1.0",
       updated: "Jun 2026",
       pills: ["MP3", "MP4", "OGG", "PNG"],
@@ -75,46 +75,17 @@
     },
   ];
 
-  /* ---------- Storage helpers ---------- */
-  const USERS_KEY = "evo_users";
-  const SESSION_KEY = "evo_session";
-
-  const getUsers = () => JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
-  const saveUsers = (u) => localStorage.setItem(USERS_KEY, JSON.stringify(u));
-  // tiny non-cryptographic hash, just so passwords aren't stored as plain text
-  function hash(str) {
-    let h = 5381;
-    for (let i = 0; i < str.length; i++) h = (h * 33) ^ str.charCodeAt(i);
-    return (h >>> 0).toString(16);
-  }
-
-  function getSession() {
-    try { return JSON.parse(sessionStorage.getItem(SESSION_KEY) || localStorage.getItem(SESSION_KEY) || "null"); }
-    catch (e) { return null; }
-  }
-  function setSession(user, remember) {
-    const data = JSON.stringify({ username: user.username, email: user.email });
-    (remember ? localStorage : sessionStorage).setItem(SESSION_KEY, data);
-  }
-  function clearSession() {
-    localStorage.removeItem(SESSION_KEY);
-    sessionStorage.removeItem(SESSION_KEY);
-  }
-
-  /* ---------- Favorites (per user) ---------- */
-  function favKey() {
-    const s = getSession();
-    return "evo_favs_" + (s ? s.username.toLowerCase() : "guest");
-  }
+  /* ---------- Favorites ---------- */
+  const FAVS_KEY = "evo_favs";
   function getFavs() {
-    try { return JSON.parse(localStorage.getItem(favKey()) || "[]"); } catch (e) { return []; }
+    try { return JSON.parse(localStorage.getItem(FAVS_KEY) || "[]"); } catch (e) { return []; }
   }
   function isFav(id) { return getFavs().includes(id); }
   function toggleFav(id) {
     const favs = getFavs();
     const i = favs.indexOf(id);
     if (i >= 0) favs.splice(i, 1); else favs.push(id);
-    localStorage.setItem(favKey(), JSON.stringify(favs));
+    localStorage.setItem(FAVS_KEY, JSON.stringify(favs));
     return i < 0; // true when it is now a favorite
   }
 
@@ -146,7 +117,6 @@
 
   /* ---------- Element refs ---------- */
   const $ = (s) => document.querySelector(s);
-  const authScreen = $("#auth");
   const appScreen = $("#app");
 
   /* ---------- Theme ---------- */
@@ -177,135 +147,6 @@
       setTimeout(() => (t.hidden = true), 300);
     }, 2600);
   }
-
-  /* ---------- Auth UI: tabs ---------- */
-  const tabs = document.querySelectorAll(".auth-tab");
-  const tabsWrap = $(".auth-tabs");
-  tabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      const which = tab.dataset.tab;
-      tabs.forEach((t) => t.classList.toggle("active", t === tab));
-      tabsWrap.dataset.active = which;
-      $("#loginForm").classList.toggle("active", which === "login");
-      $("#registerForm").classList.toggle("active", which === "register");
-      hideError("login"); hideError("register");
-    });
-  });
-
-  /* ---------- Password toggles ---------- */
-  document.querySelectorAll(".pw-toggle").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const input = btn.previousElementSibling;
-      const show = input.type === "password";
-      input.type = show ? "text" : "password";
-      btn.style.opacity = show ? "0.95" : "0.5";
-    });
-  });
-
-  /* ---------- Password strength meter ---------- */
-  const pwInput = $('#registerForm input[name="password"]');
-  const meter = document.querySelector(".pw-meter i");
-  pwInput.addEventListener("input", () => {
-    const v = pwInput.value;
-    let score = 0;
-    if (v.length >= 6) score++;
-    if (v.length >= 10) score++;
-    if (/[A-Z]/.test(v) && /[a-z]/.test(v)) score++;
-    if (/\d/.test(v) || /[^A-Za-z0-9]/.test(v)) score++;
-    const pct = [0, 30, 55, 80, 100][score];
-    const color = ["#ff375f", "#ff375f", "#ff9f0a", "#ffd60a", "#34c759"][score];
-    meter.style.width = pct + "%";
-    meter.style.background = color;
-  });
-
-  /* ---------- Error helpers ---------- */
-  function showError(form, msg) {
-    const el = document.querySelector(`.form-error[data-for="${form}"]`);
-    el.textContent = msg; el.classList.add("show");
-  }
-  function hideError(form) {
-    const el = document.querySelector(`.form-error[data-for="${form}"]`);
-    el.classList.remove("show");
-  }
-
-  /* ---------- Register ---------- */
-  $("#registerForm").addEventListener("submit", (e) => {
-    e.preventDefault();
-    hideError("register");
-    const fd = new FormData(e.target);
-    const username = fd.get("username").trim();
-    const email = fd.get("email").trim().toLowerCase();
-    const password = fd.get("password");
-
-    if (username.length < 3) return showError("register", "Username must be at least 3 characters.");
-    if (password.length < 6) return showError("register", "Password must be at least 6 characters.");
-
-    const users = getUsers();
-    if (users.some((u) => u.email === email)) return showError("register", "An account with this email already exists.");
-    if (users.some((u) => u.username.toLowerCase() === username.toLowerCase())) return showError("register", "That username is taken.");
-
-    const user = { username, email, pass: hash(password) };
-    users.push(user);
-    saveUsers(users);
-    setSession(user, true);
-    toast("Account created — welcome, " + username + "!");
-    enterApp();
-  });
-
-  /* ---------- Login ---------- */
-  $("#loginForm").addEventListener("submit", (e) => {
-    e.preventDefault();
-    hideError("login");
-    const fd = new FormData(e.target);
-    const id = fd.get("identifier").trim().toLowerCase();
-    const password = fd.get("password");
-    const remember = fd.get("remember") != null;
-
-    const users = getUsers();
-    const user = users.find((u) => u.email === id || u.username.toLowerCase() === id);
-    if (!user || user.pass !== hash(password)) return showError("login", "Incorrect credentials. Try again.");
-
-    setSession(user, remember);
-    toast("Welcome back, " + user.username + "!");
-    enterApp();
-  });
-
-  /* ---------- Enter / leave app ---------- */
-  function enterApp() {
-    const sess = getSession();
-    if (!sess) return;
-    authScreen.style.display = "none";
-    appScreen.hidden = false;
-    window.scrollTo(0, 0);
-
-    const initial = (sess.username || "U").charAt(0).toUpperCase();
-    $("#avatar").textContent = initial;
-    $("#ddAvatar").textContent = initial;
-    $("#userName").textContent = sess.username;
-    $("#ddName").textContent = sess.username;
-    $("#ddEmail").textContent = sess.email;
-
-    applyView(); // favorites are per-user, so re-render for this account
-  }
-
-  $("#logoutBtn").addEventListener("click", () => {
-    clearSession();
-    appScreen.hidden = true;
-    authScreen.style.display = "flex";
-    $("#userDropdown").hidden = true;
-    toast("Signed out.");
-  });
-
-  /* ---------- User dropdown ---------- */
-  const userBtn = $("#userBtn");
-  const dropdown = $("#userDropdown");
-  userBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    dropdown.hidden = !dropdown.hidden;
-  });
-  document.addEventListener("click", (e) => {
-    if (!dropdown.hidden && !dropdown.contains(e.target) && !userBtn.contains(e.target)) dropdown.hidden = true;
-  });
 
   /* ---------- Render app cards ---------- */
   const grid = $("#appsGrid");
@@ -433,7 +274,4 @@
 
   /* ---------- Footer year ---------- */
   $("#year").textContent = "2026";
-
-  /* ---------- Auto-login if session exists ---------- */
-  if (getSession()) enterApp();
 })();

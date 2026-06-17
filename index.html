@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ethan van Oost — Apps</title>
-  <meta name="description" content="Apps by Ethan van Oost: Cubelands, Filey, and Youtube Converter. Sign in to download." />
+  <meta name="description" content="Apps by Ethan van Oost: Cubelands, Filey, and Youtube Converter. Free Windows downloads." />
   <link rel="stylesheet" href="style.css" />
   <script>
     // Apply the saved theme before first paint so there's no flash of the wrong theme.
@@ -23,70 +23,8 @@
     <span class="blob blob-4"></span>
   </div>
 
-  <!-- ============ AUTH GATE ============ -->
-  <div id="auth" class="auth-screen">
-    <div class="auth-card glass">
-      <div class="auth-brand">
-        <div class="auth-logo">EvO</div>
-        <h1 class="auth-brand-name">Ethan van Oost</h1>
-        <p class="auth-brand-sub">Sign in to download the apps</p>
-      </div>
-
-      <div class="auth-tabs">
-        <button class="auth-tab active" data-tab="login">Sign in</button>
-        <button class="auth-tab" data-tab="register">Register</button>
-        <span class="auth-tab-indicator"></span>
-      </div>
-
-      <!-- LOGIN -->
-      <form id="loginForm" class="auth-form active" autocomplete="on">
-        <label class="field">
-          <span class="field-label">Email or username</span>
-          <input type="text" name="identifier" required placeholder="you@example.com" />
-        </label>
-        <label class="field">
-          <span class="field-label">Password</span>
-          <span class="field-pw">
-            <input type="password" name="password" required placeholder="Your password" />
-            <button type="button" class="pw-toggle" aria-label="Show password">👁</button>
-          </span>
-        </label>
-        <label class="check">
-          <input type="checkbox" name="remember" checked />
-          <span>Keep me signed in</span>
-        </label>
-        <p class="form-error" data-for="login"></p>
-        <button type="submit" class="btn-primary">Sign in</button>
-      </form>
-
-      <!-- REGISTER -->
-      <form id="registerForm" class="auth-form" autocomplete="on">
-        <label class="field">
-          <span class="field-label">Username</span>
-          <input type="text" name="username" required minlength="3" placeholder="ethan" />
-        </label>
-        <label class="field">
-          <span class="field-label">Email</span>
-          <input type="email" name="email" required placeholder="you@example.com" />
-        </label>
-        <label class="field">
-          <span class="field-label">Password</span>
-          <span class="field-pw">
-            <input type="password" name="password" required minlength="6" placeholder="At least 6 characters" />
-            <button type="button" class="pw-toggle" aria-label="Show password">👁</button>
-          </span>
-          <span class="pw-meter"><i></i></span>
-        </label>
-        <p class="form-error" data-for="register"></p>
-        <button type="submit" class="btn-primary">Create account</button>
-      </form>
-
-      <p class="auth-note">Accounts are stored locally on this device.</p>
-    </div>
-  </div>
-
-  <!-- ============ MAIN APP (shown after login) ============ -->
-  <div id="app" class="app" hidden>
+  <!-- ============ MAIN APP ============ -->
+  <div id="app" class="app">
     <nav class="topbar glass">
       <div class="brand">
         <div class="brand-logo">EvO</div>
@@ -97,23 +35,6 @@
         <input id="search" type="search" placeholder="Search apps…" />
       </div>
       <button id="themeToggle" class="icon-btn" type="button" aria-label="Toggle theme" title="Toggle theme">🌙</button>
-      <div class="user-menu">
-        <button id="userBtn" class="user-chip">
-          <span class="avatar" id="avatar">E</span>
-          <span class="user-name" id="userName">User</span>
-          <span class="caret">▾</span>
-        </button>
-        <div id="userDropdown" class="user-dropdown glass" hidden>
-          <div class="dd-header">
-            <span class="avatar lg" id="ddAvatar">E</span>
-            <div>
-              <p class="dd-name" id="ddName">User</p>
-              <p class="dd-email" id="ddEmail">user@example.com</p>
-            </div>
-          </div>
-          <button id="logoutBtn" class="dd-item">Sign out</button>
-        </div>
-      </div>
     </nav>
 
     <header class="hero">
