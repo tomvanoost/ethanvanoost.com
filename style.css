@@ -261,6 +261,7 @@ body {
 .icon-ytc { background: rgba(255,55,95,0.14); color: var(--accent-pink); }
 .icon-musy { background: rgba(124,92,255,0.16); color: #7c5cff; }
 .icon-survivor { background: rgba(0,224,198,0.16); color: #0a9c86; }
+.icon-ducker { background: rgba(245,166,35,0.16); color: #d98a00; }
 
 .card-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 3px; }
 .card-tag { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--accent); font-weight: 600; margin-bottom: 14px; }

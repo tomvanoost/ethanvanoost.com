@@ -124,6 +124,30 @@
         "Also available as the original turn-based CMD edition",
       ],
     },
+    {
+      id: "ducker",
+      title: "Ducker",
+      tag: "Shop & restaurant POS",
+      iconClass: "icon-ducker",
+      icon: "🦆",
+      desc: "A point-of-sale app for shops and restaurants. Set up your shop, build an item catalog with sizes and options, ring up sales on a touch-friendly receipt, and redeem gift cards — all stored locally on your PC. Admin mode even lets AI generate a starter menu from a description.",
+      file: "downloads/Ducker.exe",
+      size: "49.6 MB",
+      version: "1.0",
+      updated: "Jun 2026",
+      pills: ["POS", "Retail", "Gift cards", "AI"],
+      btn: "Download",
+      screenshots: ["screenshots/ducker-pos.png", "screenshots/ducker-admin.png"],
+      features: [
+        "Touch-friendly point of sale — tap items to build the receipt",
+        "Items with custom names, typed prices, and option groups (e.g. Size) with price add-ons",
+        "Adjust quantities, remove lines, and see the running total live",
+        "Create and redeem gift cards against a sale",
+        "Admin mode to manage products, groups, gift cards, and shop settings",
+        "Generate a sample catalog with AI, or import/export your items as JSON",
+        "All shop data stays local on your PC — no account, no install",
+      ],
+    },
   ];
 
   /* ---------- Favorites ---------- */
