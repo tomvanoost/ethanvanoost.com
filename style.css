@@ -58,6 +58,24 @@ body {
   box-shadow: var(--glass-shadow);
 }
 
+/* ---------- SmartScreen heads-up notice ---------- */
+.notice-wrap { max-width: 1100px; margin: 0 auto; padding: 0 24px 18px; }
+.notice {
+  border-radius: var(--radius-sm);
+  padding: 15px 18px;
+  display: flex; gap: 13px; align-items: flex-start;
+  border-left: 3px solid var(--accent);
+}
+.notice-icon { font-size: 1.35rem; line-height: 1.4; flex-shrink: 0; }
+.notice-body { color: var(--text-dim); font-size: 0.9rem; line-height: 1.55; }
+.notice-body b { color: var(--text); font-weight: 700; }
+
+.dl-note {
+  margin-top: 12px; text-align: center;
+  color: var(--text-faint); font-size: 0.8rem; line-height: 1.5;
+}
+.dl-note b { color: var(--text-dim); font-weight: 700; }
+
 /* ============ AUTH ============ */
 .auth-screen {
   min-height: 100vh;

@@ -56,6 +56,17 @@
       </div>
     </header>
 
+    <!-- Heads-up: these unsigned indie apps can trip Windows SmartScreen / browser download checks -->
+    <div class="notice-wrap">
+      <aside class="notice glass" role="note">
+        <span class="notice-icon" aria-hidden="true">🛡️</span>
+        <div class="notice-body">
+          <b>Windows might warn you before these open — that's expected, and they're safe.</b>
+          These are independently-made apps that aren't code-signed yet, so Windows SmartScreen flags new apps it doesn't recognize. If your browser asks, choose <b>Keep</b>. If you see a blue <b>“Windows protected your PC”</b> box, click <b>More info → Run anyway</b>.
+        </div>
+      </aside>
+    </div>
+
     <div class="controls">
       <button id="favFilter" class="chip-toggle" type="button" aria-pressed="false">★ Favorites</button>
       <label class="sort-wrap">
@@ -96,6 +107,7 @@
       <ul id="mFeatures" class="feature-list"></ul>
       <a id="mDownload" class="btn-primary block" href="#" download>Download</a>
       <div id="mAltDownloads"></div>
+      <p class="dl-note">🛡️ Unsigned app — if Windows or your browser warns, choose <b>Keep</b>, then <b>More info → Run anyway</b>. It's safe.</p>
     </div>
   </div>
 
